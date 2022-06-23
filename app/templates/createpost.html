@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <link rel="stylesheet" href="{{url_for('.static', filename='create.css')}}">
+
+    {% import "bootstrap/wtf.html" as wtf %}
+    <div class="create">
+        <form class="form-create" method="POST" action="#" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            {{ wtf.form_field(form.content, class='form-control') }}
+            {{ wtf.form_field(form.submit, class='btn btn-lg btn-outline-light btn-block') }}
+        </form>
+    </div>
+{% endblock %}

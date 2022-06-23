@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <article class="media content-section">
+        <div class="likes">
+            <h5><a href="{{ url_for('like_post', post_id=post.id) }}">+</a></h5>
+            <h4>{{ post.likes }}</h4>
+            <h5><a href="{{ url_for('unlike_post', post_id=post.id) }}">-</a></h5>
+        </div>
+        <div class="media-body">
+            <div class="article-metadata">
+                <a class="mr-2" href="{{ url_for('user_page', username=post.author.username) }}">
+                    <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.avatar) }}">
+                    {{ post.author.username }}
+                </a>
+                <small class="text-muted">{{ post.date_posted.strftime('%H:%M, %d-%m-%Y') }}</small>
+                {% if post.author == current_user %}
+                    <div class="edit-article">
+                        <small><a href="{{ url_for('update_post', post_id=post.id) }}">Edit</a></small>
+                        <small><a href="{{ url_for('delete_post', post_id=post.id) }}" data-toggle="modal" data-target="#deletePost">Delete</a></small>
+                    </div>
+                {% endif %}
+            </div>
+            <p class="article-content">{{ post.content }}</p>
+            <div class="comment-section">
+                <div class="post-comment">
+                    {% if current_user.is_authenticated %}
+                        <form class="form-comment" method="POST" action="#">
+                            {{ commentForm.hidden_tag() }}
+                            <h4 class="form-create-heading">Comment post:</h4>
+                            {{ wtf.form_field(commentForm.content, class='form-control') }}
+                            {{ wtf.form_field(commentForm.submit, class='btn btn-lg btn-outline-light btn-block') }}
+                        </form>
+                    {% endif %}
+                </div>
+                <div class="comments">
+                    <h3 class="form-create-heading">Comments:</h3>
+                    {% for comment in comments %}
+                        <article class="media content-section">
+                            <div class="likes">
+                                <h5><a href="{{ url_for('like_comment', post_id=post.id, comment_id=comment.id) }}">+</a></h5>
+                                <h4>{{ comment.likes }}</h4>
+                                <h5><a href="{{ url_for('unlike_comment', post_id=post.id, comment_id=comment.id) }}">-</a></h5>
+                            </div>
+                            <div class="media-body">
+                                <div class="article-metadata">
+                                    <a class="mr-2" href="{{ url_for('user_page', username=comment.author.username) }}">
+                                        <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.author.avatar) }}">
+                                        {{ comment.author.username }}
+                                    </a>
+                                    <small class="text-muted">{{ comment.date_posted.strftime('%H:%M, %d-%m-%Y') }}</small>
+                                    {% if comment.author == current_user %}
+                                        <div class="edit-comment">
+                                            <small><a href="{{ url_for('update_comment', post_id=post.id, comment_id=comment.id) }}">Edit</a></small>
+                                            <small><a href="{{ url_for('delete_comment', post_id=post.id, comment_id=comment.id) }}" data-toggle="modal" data-target="#deleteComment">Delete</a></small>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <p class="article-content">{{ comment.content }}</p>
+                            </div>
+                        </article>
+                        <!-- Modal Delete Comment -->
+                        <div class="modal fade" id="deleteComment" tabindex="-1" role="dialog" aria-labelledby="deleteCommentLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="deleteCommentLabel">Delete comment?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <form action="{{ url_for('delete_comment', post_id=post.id, comment_id=comment.id) }}" method="POST">
+                                    <input class="btn btn-danger" type="submit" value="Delete">
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </article>
+    <!-- Modal Delete Post -->
+    <div class="modal fade" id="deletePost" tabindex="-1" role="dialog" aria-labelledby="deletePostLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deletePostLabel">Delete post?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+{% block sidebar %}
+    {% if current_user.is_authenticated %}
+        <div class="account">
+            <h3 class="account-heading">Welcome, {{ current_user.username }}</h3>
+            <div><img class="rounded-circle account-img" src="{{ avatar }}"></div>
+            <div><a href="/createpost">New Post</a></div>
+            <div><a href="/account">Edit Account</a></div>
+            <div><a href="/logout">Logout</a></div>
+        </div>
+    {% else %}
+        <div class="login">
+            <form class="form-login" method="POST" action="#">
+                {{ loginForm.hidden_tag() }}
+                <h3 class="form-login-heading">Login</h3>
+                {{ wtf.form_field(loginForm.username, class='form-control', placeholder='Username') }}
+                {{ wtf.form_field(loginForm.password, class='form-control', placeholder='Password') }}
+                {{ wtf.form_field(loginForm.remember, class='form-check-input') }}
+                {{ wtf.form_field(loginForm.submit, class='btn btn-lg btn-outline-light btn-block') }}
+                <div>Don't have an account? <a href="/signup">Sign up!</a></div>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}

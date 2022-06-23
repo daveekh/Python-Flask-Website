@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Change e-mail{% endblock %}
+{% block content %}
+
+    <link rel="stylesheet" href="{{url_for('.static', filename='update.css')}}">
+
+    {% import "bootstrap/wtf.html" as wtf %}
+        <div class="update">
+            <form class="form-update" method="POST" action="#" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <h3 class="form-update-heading">Change e-mail</h3>
+                {{ wtf.form_field(form.email, class='form-control', placeholder='New e-mail') }}
+                {{ wtf.form_field(form.submit, class='btn btn-lg btn-outline-light btn-block') }}
+                <a href="/account">Go back!</a>
+            </form>
+        </div>
+{% endblock %}

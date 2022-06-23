@@ -1,0 +1,38 @@
+body {
+  background: #303030;
+  color: #fafafa;
+  margin-top: 5rem;
+}
+
+.update {
+    background: #202020;
+    padding: 10px 20px;
+}
+
+.form-update {
+    background: #202020;
+    max-width: 330px;
+    padding: 20px;
+    margin: 0;
+}
+
+.form-update-heading {
+    margin-bottom: 20px;
+}
+
+
+.form-control {
+    margin-bottom: 0px;
+}
+
+.form-control-file {
+    margin-bottom: 20px;
+}
+
+input#submit.btn {
+    margin-bottom: 20px;
+}
+
+.control-label {
+    display: none;
+}

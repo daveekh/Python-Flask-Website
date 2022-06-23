@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block title %}Change e-mail{% endblock %}
+{% block content %}
+
+    <link rel="stylesheet" href="{{url_for('.static', filename='update.css')}}">
+
+    {% import "bootstrap/wtf.html" as wtf %}
+        <div class="update">
+            <form class="form-update" method="POST" action="#" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <h3 class="form-update-heading">Change avatar</h3>
+                <img class="rounded-circle account-img" src="{{ avatar }}">
+                {{ form.avatar(class="form-control-file") }}
+                {% if form.avatar.errors %}
+                    {% for error in form.avatar.errors %}
+                        <span class="text-danger">{{ error }}</span><br>
+                    {% endfor %}
+                {% endif %}
+                {{ wtf.form_field(form.submit, class='btn btn-lg btn-outline-light btn-block') }}
+                <a href="/account">Go back!</a>
+            </form>
+        </div>
+{% endblock %}

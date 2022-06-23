@@ -1,0 +1,28 @@
+body {
+  background: #303030;
+  color: #fafafa;
+  margin-top: 5rem;
+}
+
+.form-login {
+    background: #202020;
+    max-width: 330px;
+    padding: 20px;
+    margin: 0;
+}
+
+.form-login-heading {
+    margin-bottom: 20px;
+}
+
+.form-login input[type="text"] {
+    margin-bottom: 5px;
+}
+
+.form-login input[type="password"] {
+    margin-bottom: 10px;
+}
+
+.form-login .checkbox {
+    margin-bottom: 10px;
+}
