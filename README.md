@@ -1,1 +1,3 @@
-# Python-Flask-Website
+# Python Flask Website
+
+Dawid Nadzieja © 2022
